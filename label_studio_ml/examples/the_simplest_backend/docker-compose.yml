@@ -27,3 +27,4 @@ services:
       - redis
     volumes:
       - "./logs:/tmp"
+      - /home/bcwein/.local/share/label-studio/media:/app/media
