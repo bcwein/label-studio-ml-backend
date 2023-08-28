@@ -16,7 +16,7 @@ RUN --mount=type=cache,target=$PIP_CACHE_DIR \
 
 COPY uwsgi.ini /etc/uwsgi/
 COPY supervisord.conf /etc/supervisor/conf.d/
-COPY Sognefjord-Yolov8.pt /app/Sognefjord-Yolov8.pt
+COPY Sognefjord-Yolov8-2.pt /app/Sognefjord-Yolov8-2.pt
 WORKDIR /app
 
 COPY *.py /app/

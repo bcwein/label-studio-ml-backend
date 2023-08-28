@@ -17,14 +17,14 @@ LABELS = {
     4: 'fucus vesiculosus',
     5: 'mytilus edulis',
     6: 'myxine glurinosa',
-    6: 'pipe',
-    7: 'rock',
-    8: 'saccharina latissima',
-    9: 'seafloor',
-    10: 'tree',
-    11: 'ulva intestinalis',
-    12: 'urospora',
-    13: 'zostera marina'
+    7: 'pipe',
+    8: 'rock',
+    9: 'saccharina latissima',
+    10: 'seafloor',
+    11: 'tree',
+    12: 'ulva intestinalis',
+    13: 'urospora',
+    14: 'zostera marina'
 }
 
 class MyModel(LabelStudioMLBase):
@@ -45,8 +45,15 @@ class MyModel(LabelStudioMLBase):
                 boxes = result.boxes
                 masks = result.masks
                 output_prediction_task = []
-                for label, confidence, box, polygon in zip(boxes.cls, boxes.conf, boxes.xyxyn, masks.xyn):
+                for label, confidence, polygon in zip(boxes.cls, boxes.conf, masks.xyn):
                     label = int(label.item())
+
+                    if label == 3:
+                        continue
+
+                    if label == 10:
+                        continue
+
                     output_prediction_task.append({
                         'from_name': 'polygon_label',
                         'to_name': 'image',
@@ -55,21 +62,6 @@ class MyModel(LabelStudioMLBase):
                         'value': {
                             'polygonlabels': [LABELS[label]],
                             'points': (polygon*100).tolist()
-                        }
-                    })
-
-                    x1, y1, x2, y2 = box
-                    output_prediction_task.append({
-                        'from_name': 'rectangle_label',
-                        'to_name': 'image', 
-                        'type': 'rectanglelabels',
-                        'score': confidence.item(),
-                        'value': {
-                            'rectanglelabels': [LABELS[label]],
-                            'x': float(x1*100),
-                            'y': float(y1*100),
-                            'width': float((x2 - x1)*100),
-                            'height': float((y2 - y1)*100)
                         }
                     })
 
